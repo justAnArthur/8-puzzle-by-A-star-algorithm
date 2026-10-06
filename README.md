@@ -1,3 +1,81 @@
+<a href="https://github.com/justAnArthur/8-puzzle-by-A-star-algorithm"><img src=".github/banner.svg" alt="8-puzzle solver: Heuristic search over any m × n sliding puzzle, with Hamming and Manhattan distance compared on five start states." width="100%"></a>
+
+# 8-puzzle solver
+
+Solves the sliding 8-puzzle, or any m × n board, by heuristic search with a choice of Hamming or Manhattan distance. Built for Artificial Intelligence (UI) at FIIT STU in autumn 2023.
+
+> Finished and archived. The assignment asked for A\*; the solver ranks nodes by heuristic score alone, so it behaves as greedy best-first search and does not always find the shortest path.
+
+## What it does
+
+- Reads the board size, start state and goal state from the terminal (`0` is the empty tile); the goal defaults to the solved board
+- Always expands the open node with the lowest heuristic score, oldest first on ties
+- Caps paths at 31 moves and gives up with "no solution" after (m·n)! nodes
+- Prints live progress (nodes created, depth, score, elapsed time), then the solution as a list of moves
+
+## How it works
+
+```mermaid
+flowchart TD
+  A[Read board size, start, goal, heuristic] --> B[Open list holds the start node]
+  B --> C{Take the lowest-score node, oldest on ties}
+  C -->|score is 0| D[Print the moves]
+  C -->|"(m·n)! nodes created"| E[Give up: no solution]
+  C -->|otherwise| F{Path shorter than 31 moves?}
+  F -->|no| B
+  F -->|yes| G[Add a child for each legal move]
+  G --> H[Score each child with Hamming or Manhattan]
+  H --> B
+```
+
+## Results
+
+| Start state       | Hamming nodes / depth / s | Manhattan nodes / depth / s |
+|-------------------|---------------------------|-----------------------------|
+| 6 3 0 4 2 8 7 5 1 | 3478 / 28 / 0.70          | 1515 / 28 / 0.31            |
+| 1 8 0 2 5 3 6 7 4 | 4670 / 28 / 1.24          | 4145 / 28 / 0.92            |
+| 4 5 0 2 6 8 1 3 7 | 28877 / 28 / 28.58        | 2717 / 30 / 0.47            |
+| 3 2 5 7 1 8 0 4 6 | 2705 / 30 / 0.45          | 12482 / 22 / 7.65           |
+| 6 3 2 5 8 7 4 1 0 | 69479 / 29 / 192.68       | 3913 / 30 / 0.93            |
+
+Manhattan distance was faster on four of the five start states, up to 207×.
+
+## Run
+
+```bash
+python main.py
+```
+
+```text
+Enter a state sizes, like m n, or ENTER if default:
+3 3
+Enter a initial state of the puzzle 1-8, and 0 as an empty one:
+5 1 0 2 4 6 3 7 8
+Enter a goal state of the puzzle 1-8, and 0 as an empty one, or ENTER if default:
+
+Select method for calculating a Heuristic score:
+2
+Nodes: 4215 | Depth: 28 | Score: 0 | Time: 1.6266 sec
+left left down right up left down down right up left down right right up left up right down down left left up up right down down right
+```
+
+## Stack
+
+Python 3.10, standard library only (`copy.deepcopy`, `math`, `time`).
+
+## Documentation
+
+- [01 8-puzzle AI solver.pdf](01%208-puzzle%20AI%20solver.pdf): assignment report (Slovak)
+- [UI_01_Artur_Kozubov.zip](UI_01_Artur_Kozubov.zip): the submitted archive
+
+## License
+
+[CC BY-NC-ND 4.0](LICENSE): share it with credit, but no changes and no commercial use. Don't hand it in as your own coursework.
+
+---
+
+## Pôvodná dokumentácia (SK)
+
 ## Zadanie úlohy _(e) Problém 2. A* algoritmus_
 
 Našou úlohou je nájsť riešenie 8-hlavolamu. Hlavolam je zložený z 8 očíslovaných políčok a jedného prázdneho miesta.
